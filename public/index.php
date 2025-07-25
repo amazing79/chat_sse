@@ -33,7 +33,7 @@
     const sendBtn = document.getElementById("sendBtn");
 
     // SSE para recibir mensajes en tiempo real
-    const evtSource = new EventSource("chat_ssr.php");
+    const evtSource = new EventSource("chat_sse.php");
     evtSource.addEventListener("message", (e) => {
         const data = JSON.parse(e.data);
         const div = document.createElement("div");

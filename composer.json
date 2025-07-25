@@ -1,0 +1,20 @@
+{
+    "name": "ignacio/chat-ssr",
+    "description": "Sistema de chat utilizando Server Sent events",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Ignacio\\ChatSsr\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "amazing79",
+            "email": "ignacioja@hotmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "predis/predis": "^3.1"
+    }
+}

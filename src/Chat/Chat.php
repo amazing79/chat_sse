@@ -2,24 +2,30 @@
 
 namespace Ignacio\ChatSsr\Chat;
 
-use Predis\Client;
-
 class Chat
 {
-    const CHAT_KEY = 'chat';
-    private Client $chatStore;
-    public function __construct(Client $client)
+    public function __construct(
+        private ChatRepository $repository,
+        private ?Presenter $presenter = null
+    )
     {
-        $this->chatStore = $client;
+        $this->repository = $repository;
+        $this->presenter = $presenter;
+    }
+
+    private function hasPresenter(): bool
+    {
+        return !is_null($this->presenter);
     }
 
     public function getAllMessagesEvent(): string
     {
-        $messages = $this->chatStore->lrange(self::CHAT_KEY, 0, -1);
-        $output = '\n';
+        $messages = $this->repository->getAllMessages();
+        $output = "\n";
         foreach ($messages as $message) {
+            $text = $this->hasPresenter() ? $this->presenter->render($message) : $message;
             $output .= "event: message\n";
-            $output .= "data: " . json_encode(['text' => $message]) . "\n\n";
+            $output .= "data: " . json_encode(['text' => json_encode($text)]) . "\n\n";
         }
         return $output;
     }
@@ -27,23 +33,27 @@ class Chat
     public function getLastsMessagesEvents($lastCount): string
     {
         // Hay mensajes nuevos → obtener solo los nuevos
-        $lastMessages = $this->chatStore->lRange(self::CHAT_KEY, $lastCount, $this->getTotalMessages());
-        $output = '\n';
+        $lastMessages = $this->repository->getNewMessages($lastCount);
+        $output = "\n";
         foreach ($lastMessages as $message) {
+            $text = $this->hasPresenter() ? $this->presenter->render($message) : $message;
             $output .= "event: message\n";
-            $output .= "data: " . json_encode(['text' => $message]) . "\n\n";
+            $output .= "data: " . json_encode(['text' => $text]) . "\n\n";
         }
 
         return $output;
     }
 
-    public function sendGlobalMessage(array $message): void
+    public function sendGlobalMessage(array $msg): void
     {
-        $this->chatStore->rpush(self::CHAT_KEY, $message);
+        $data['usuario'] = $msg['user'];
+        $data['texto'] = $msg['message'];
+        $message = Message::fromArray($data);
+        $this->repository->saveMessage($message);
     }
 
     public function getTotalMessages(): int
     {
-        return $this->chatStore->llen(self::CHAT_KEY);
+        return $this->repository->getTotalMessages();
     }
 }

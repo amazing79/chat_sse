@@ -1,6 +1,9 @@
 <?php
+set_time_limit(0);
 
 use Ignacio\ChatSsr\Chat\Chat;
+use Ignacio\ChatSsr\Chat\MySqlMessagePresenter;
+use Ignacio\ChatSsr\Chat\MysqlRepository;
 use Ignacio\ChatSsr\Chat\RedisRepository;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -9,9 +12,10 @@ header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
 header('X-Accel-Buffering: no');
 
-$db = new RedisRepository();
-
-$chat = new Chat($db->getClient());
+// $db = new RedisRepository();
+$db = new MysqlRepository();
+$presenter = new MySqlMessagePresenter();
+$chat = new Chat($db, $presenter);
 
 $lastCount = $chat->getTotalMessages();
 
@@ -35,6 +39,6 @@ while (true) {
     }
 
     if (connection_aborted()) break;
-
-    usleep(500000); // medio segundo para no sobrecargar CPU
+    // usleep(500000); // medio segundo para no sobrecargar CPU
+    sleep(1);
 }

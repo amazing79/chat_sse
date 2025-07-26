@@ -1,19 +1,23 @@
 <?php
 
 use Ignacio\ChatSsr\Chat\Chat;
+use Ignacio\ChatSsr\Chat\MysqlRepository;
 use Ignacio\ChatSsr\Chat\RedisRepository;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$db = new RedisRepository();
-$chat = new Chat($db->getClient());
+// $db = new RedisRepository();
+$db = new MysqlRepository();
+$chat = new Chat($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = trim($_POST['user'] ?? 'Anónimo');
     $msg = trim($_POST['msg'] ?? '');
 
     if ($msg !== '') {
-        $message[] =  date('H:i:s') . ' - ' .$user . ": " . $msg;
+        $message['user'] = $user;
+        $message['message'] =  $msg;
+
         $chat->sendGlobalMessage($message);
         echo "OK";
     } else {

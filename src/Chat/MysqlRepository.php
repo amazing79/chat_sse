@@ -33,7 +33,7 @@ class MysqlRepository implements ChatRepository
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id', $lastCount, \PDO::PARAM_INT);
         $stmt->execute();
-        $data = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         if($data) {
             $messages = [];
             foreach ($data as $message) {
@@ -55,7 +55,9 @@ class MysqlRepository implements ChatRepository
         $pdo = $this->db->getConnexion();
         $sql = 'SELECT MAX(id) FROM mensajes;';
         $stmt = $pdo->query($sql);
-        return $stmt->fetchColumn() ?? 0;
+        $stmt->execute();
+        $total = $stmt->fetchColumn() ?? 0;
+        return $total;
     }
 
     public function saveMessage($message): void

@@ -44,13 +44,13 @@ class Message
         return $this->target;
     }
 
-    public static function fromArray(array $array): Message
+    public static function fromArray(array $data): Message
     {
-        $id = $array['id'] ?? 0 ;
-        $user = $array['usuario'] ?? 'anonimo';
-        $message = $array['texto'] ?? 'Empty';
-        $date = $array['fecha'] ?? date('Y-m-d');
-        $target = $array['target'] ?? 'ALL';
+        $id = $data['id'] ?? 0 ;
+        $user = $data['usuario'] ?? 'anonimo';
+        $message = $data['texto'] ?? 'Empty';
+        $date = $data['fecha'] ?? time();
+        $target = $data['target'] ?? 'ALL';
         return new self(
             (int) $id,
             $user,

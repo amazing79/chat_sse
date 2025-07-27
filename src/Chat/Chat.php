@@ -25,7 +25,7 @@ class Chat
         foreach ($messages as $message) {
             $text = $this->hasPresenter() ? $this->presenter->render($message) : $message;
             $output .= "event: message\n";
-            $output .= "data: " . json_encode(['text' => json_encode($text)]) . "\n\n";
+            $output .= "data: " . json_encode(['text' => $text]) . "\n\n";
         }
         return $output;
     }

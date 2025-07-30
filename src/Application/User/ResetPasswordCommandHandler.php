@@ -14,14 +14,14 @@ class ResetPasswordCommandHandler
     public function handle($credentials): array
     {
         $response = [];
-        $response['status'] = 200;
+        $response['code'] = 200;
         $response['data'] = [];
         $response['message'] = 'Passowrd reset successfully';
         try {
             $this->userRepository->resetPassword($credentials);
             return $response;
         } catch (\Exception $e) {
-            $response['status'] = 500;
+            $response['code'] = 500;
             $response['message'] = $e->getMessage();
             return $response;
         }

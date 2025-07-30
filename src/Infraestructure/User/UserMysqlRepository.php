@@ -105,7 +105,7 @@ class UserMysqlRepository implements UserRepository
         $stmt->execute();
         //2do Registro la solicitud
         $sql = "INSERT INTO password_resets (email, token, expires_at) VALUES (:email, :token, :expires_at)";
-        $pst = $pdo->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':email', $values['email']);
         $stmt->bindValue(':token', $values['token']);
         $stmt->bindValue(':expires_at', $values['expires_at']);

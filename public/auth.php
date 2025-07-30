@@ -81,7 +81,7 @@ if ($action === 'reset_confirm') {
     $newCredentials['token'] = $_POST['token'];
     $newCredentials['password'] = $pass;
     $command = new ResetPasswordCommandHandler(new UserMysqlRepository(new DB()));
-    $response = $command->handle($pass);
+    $response = $command->handle($newCredentials);
     if ($response['code'] === 200) {
         echo "Contraseña actualizada. <a href='index.html'>Ingresar</a>";
     } else {

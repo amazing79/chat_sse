@@ -16,7 +16,7 @@ class RegisterUserCommandHandler
     public function handle($values): array
     {
         $response = [];
-        $response['status'] = 200;
+        $response['code'] = 200;
         $response['data'] = [];
         $response['message'] = '';
         try{
@@ -26,7 +26,7 @@ class RegisterUserCommandHandler
             $response['message'] = 'User created with id ' . $id;
             return $response;
         } catch (\Exception $e) {
-            $response['status'] = 500;
+            $response['code'] = 500;
             $response['message'] = "An error occurred: {$e->getMessage()}";
             return $response;
         }

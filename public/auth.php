@@ -42,7 +42,7 @@ if ($action === 'login') {
         header("Location: main.php");
         exit;
     } else {
-        echo "Error de inicio de sesión";
+        header("Location: index.html");
         exit;
     }
 }

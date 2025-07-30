@@ -1,20 +1,35 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: sans-serif;
-    background: #f8f9fa;
-    padding: 1rem;
+    background: #DFF2FE;
+    padding: 4rem 1rem;
+    display: flex;
+}
+
+h2{
+    color: #2984D1;
+    margin-bottom: 10px;
 }
 
 .container {
     background: white;
-    padding: 2rem;
+    padding: 1rem;
     border-radius: 1rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 100%; max-width: 400px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    width: 100%;
+    max-width: 800px;
 }
 
 #chat-container {
     max-width: 600px;
     margin: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 #messages {
@@ -42,4 +57,11 @@ button {
 
 .logout {
     float: right;
+    text-decoration: none;
+    color: black;
+}
+
+.logout:hover {
+    cursor: pointer;
+    color: #2984D1;
 }

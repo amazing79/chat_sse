@@ -28,7 +28,7 @@ if (!$user) {
 <body>
 <div id="chat-container" class="container">
     <h2>Bienvenido <?= htmlspecialchars($user['nombre']) ?> <?= htmlspecialchars($user['apellido']) ?>
-        <a class="logout" href="logout.php">Cerrar sesión</a>
+        <a class="logout" href="logout.php">Salir</a>
     </h2>
 
     <div id="messages"></div>

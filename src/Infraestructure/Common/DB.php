@@ -12,7 +12,7 @@ class DB{
     public function __construct(
         $host = "localhost",
         $user = "root",
-        $pass = "kosnurren",
+        $pass = "gueraike",
         $dbname = "chatdb")
     {
         try {

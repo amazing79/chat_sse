@@ -10,13 +10,12 @@ class LoginUserCommandHandler
         private UserRepository $userRepository,
     )
     {
-
     }
 
     public function handle(array $credentials): array
     {
         $response = [];
-        $response['status'] = 200;
+        $response['code'] = 200;
         $response['data'] = [];
         $response['message'] = 'User was successfully logged in';
         try {
@@ -24,10 +23,10 @@ class LoginUserCommandHandler
             if (!$user) {
                 throw new \Exception('User not found');
             }
-            $response['data'] = $user;
+            $response['data'] = $user->getUserId();
             return $response;
         } catch (\Exception $e) {
-            $response['status'] = 500;
+            $response['code'] = 500;
             $response['message'] = $e->getMessage();
             return $response;
         }

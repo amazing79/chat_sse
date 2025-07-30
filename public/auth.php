@@ -1,44 +1,52 @@
 <?php
 
-session_start();
-$pdo = new PDO("mysql:host=localhost;dbname=chatdb;charset=utf8mb4", "root", "gueraike");
+use Ignacio\ChatSsr\Application\User\LoginUserCommandHandler;
+use Ignacio\ChatSsr\Application\User\RegisterResetRequestCommandHandler;
+use Ignacio\ChatSsr\Application\User\RegisterUserCommandHandler;
+use Ignacio\ChatSsr\Application\User\ResetPasswordCommandHandler;
+use Ignacio\ChatSsr\Infraestructure\Common\DB;
+use Ignacio\ChatSsr\Infraestructure\User\UserMysqlRepository;
+use Ignacio\ChatSsr\Domain\Common\Utils;
 
-// Sanitizar y validar email
-function cleanEmail($email)
-{
-    return filter_var(trim($email), FILTER_VALIDATE_EMAIL);
-}
+session_start();
+
+require __DIR__ . '/../vendor/autoload.php';
 
 $action = $_POST['action'] ?? '';
 
 if ($action === 'register') {
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
-    $email = cleanEmail($_POST['email']);
+    $values = [];
+    $values['nombre'] = $_POST['nombre'];
+    $values['nombre']= $_POST['apellido'];
+    $values['email'] = Utils::cleanEmail($_POST['email']);
     $pass = $_POST['password'];
     $pass2 = $_POST['password2'];
 
-    if (!$email || $pass !== $pass2) {
+    if (!$values['email'] || $pass !== $pass2) {
         die("Error: Email inválido o contraseñas no coinciden");
     }
 
     $hash = password_hash($pass, PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, apellido, email, password) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$nombre, $apellido, $email, $hash]);
-    echo "Registro exitoso. <a href='index.html'>Ingresar</a>";
+    $values['password'] = $hash;
+    $command = new RegisterUserCommandHandler(new UserMysqlRepository(new DB()));
+    $result = $command->handle($values);
+    if ($result['code'] === 200) {
+        echo "Registro exitoso. <a href='index.html'>Ingresar</a>";
+    } else {
+        echo "Error: " . $result['message'];
+    }
+
     exit;
 }
 
 if ($action === 'login') {
-    $email = cleanEmail($_POST['email']);
-    $pass = $_POST['password'];
+    $credentials['email'] = Utils::cleanEmail($_POST['email']);
+    $credentials['password'] = $_POST['password'];
+    $command  = new LoginUserCommandHandler(new UserMysqlRepository(new DB()));
+    $response = $command->handle($credentials);
 
-    $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
-
-    if ($user && password_verify($pass, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
+    if ($response['code'] === 200) {
+        $_SESSION['user_id'] = $response['data'];
         header("Location: main.php");
         exit;
     } else {
@@ -48,41 +56,36 @@ if ($action === 'login') {
 }
 
 if ($action === 'reset_request') {
-    $email = cleanEmail($_POST['email']);
+    $email = Utils::cleanEmail($_POST['email']);
     if (!$email) die("Email inválido");
+    $values['email'] = $email;
+    $values['token'] = bin2hex(random_bytes(32));
+    $values['expires_at'] = date("Y-m-d H:i:s", time() + 3600);
 
-    $token = bin2hex(random_bytes(32));
-    $expires = date("Y-m-d H:i:s", time() + 3600);
+    $command = new RegisterResetRequestCommandHandler(new UserMysqlRepository(new DB()));
+    $response = $command->handle($values);
 
-    $pdo->prepare("DELETE FROM password_resets WHERE email = ?")->execute([$email]);
-    $pdo->prepare("INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, ?)")
-        ->execute([$email, $token, $expires]);
-
-    $link = "http://localhost/sistemas/chat/reset_password.php?token=$token";
-    // Enviar por correo en producción, aquí se muestra directamente
-    echo "Enlace para restablecer: <a href='$link'>$link</a>";
-    exit;
+    if ($response['code'] === 200) {
+        $link = "http://localhost/sistemas/chat/reset_password.php?token=$values[token]";
+        // Enviar por correo en producción, aquí se muestra directamente
+        echo "Enlace para restablecer: <a href='$link'>$link</a>";
+        exit;
+    }
 }
 
 if ($action === 'reset_confirm') {
-    $token = $_POST['token'];
     $pass = $_POST['password'];
     $pass2 = $_POST['password2'];
 
     if ($pass !== $pass2) die("Las contraseñas no coinciden");
-
-    $stmt = $pdo->prepare("SELECT * FROM password_resets WHERE token = ? AND expires_at > NOW()");
-    $stmt->execute([$token]);
-    $row = $stmt->fetch();
-
-    if ($row) {
-        $hash = password_hash($pass, PASSWORD_DEFAULT);
-        $pdo->prepare("UPDATE usuarios SET password = ? WHERE email = ?")
-            ->execute([$hash, $row['email']]);
-        $pdo->prepare("DELETE FROM password_resets WHERE email = ?")->execute([$row['email']]);
+    $newCredentials['token'] = $_POST['token'];
+    $newCredentials['password'] = $pass;
+    $command = new ResetPasswordCommandHandler(new UserMysqlRepository(new DB()));
+    $response = $command->handle($pass);
+    if ($response['code'] === 200) {
         echo "Contraseña actualizada. <a href='index.html'>Ingresar</a>";
     } else {
-        echo "Token inválido o vencido";
+        echo $response['message'];
     }
     exit;
 }

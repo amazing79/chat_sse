@@ -11,7 +11,6 @@ class RegisterUserCommandHandler
         private UserRepository $userRepository,
     )
     {
-
     }
 
     public function handle($values): array

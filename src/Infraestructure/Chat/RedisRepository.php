@@ -1,6 +1,9 @@
 <?php
 
-namespace Ignacio\ChatSsr\Chat;
+namespace Ignacio\ChatSsr\Infraestructure\Chat;
+
+use Ignacio\ChatSsr\Domain\Chat\ChatRepository;
+use Ignacio\ChatSsr\Domain\Chat\Message;
 use Predis\Client;
 class RedisRepository implements ChatRepository
 {

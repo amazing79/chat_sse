@@ -1,6 +1,10 @@
 <?php
 
-namespace Ignacio\ChatSsr\Chat;
+namespace Ignacio\ChatSsr\Infraestructure\Chat;
+
+use Ignacio\ChatSsr\Domain\Chat\ChatRepository;
+use Ignacio\ChatSsr\Domain\Chat\Message;
+use Ignacio\ChatSsr\Infraestructure\Common\DB;
 
 class MysqlRepository implements ChatRepository
 {
@@ -60,7 +64,7 @@ class MysqlRepository implements ChatRepository
         return $total;
     }
 
-    public function saveMessage($message): void
+    public function saveMessage(Message $message): void
     {
         $user = $message->getUser() ?? 'anonimo';
         $messsage = $message->getMessage() ?? 'Mensaje Vacio';

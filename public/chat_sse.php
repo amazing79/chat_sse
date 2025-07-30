@@ -1,10 +1,10 @@
 <?php
 set_time_limit(0);
 
-use Ignacio\ChatSsr\Chat\Chat;
-use Ignacio\ChatSsr\Chat\MySqlMessagePresenter;
-use Ignacio\ChatSsr\Chat\MysqlRepository;
-use Ignacio\ChatSsr\Chat\RedisRepository;
+use Ignacio\ChatSsr\Domain\Chat\Chat;
+use Ignacio\ChatSsr\Infraestructure\Chat\MySqlMessagePresenter;
+use Ignacio\ChatSsr\Infraestructure\Chat\MysqlRepository;
+use Ignacio\ChatSsr\Infraestructure\Chat\RedisRepository;
 
 require __DIR__ . '/../vendor/autoload.php';
 

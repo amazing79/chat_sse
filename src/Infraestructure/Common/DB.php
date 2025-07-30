@@ -1,6 +1,6 @@
 <?php
 
-namespace Ignacio\ChatSsr\Chat;
+namespace Ignacio\ChatSsr\Infraestructure\Common;
 
 use PDO;
 use PDOException;

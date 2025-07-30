@@ -25,7 +25,7 @@ if ($action === 'register') {
     $hash = password_hash($pass, PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, apellido, email, password) VALUES (?, ?, ?, ?)");
     $stmt->execute([$nombre, $apellido, $email, $hash]);
-    echo "Registro exitoso. <a href='auth.html'>Ingresar</a>";
+    echo "Registro exitoso. <a href='index.html'>Ingresar</a>";
     exit;
 }
 
@@ -80,7 +80,7 @@ if ($action === 'reset_confirm') {
         $pdo->prepare("UPDATE usuarios SET password = ? WHERE email = ?")
             ->execute([$hash, $row['email']]);
         $pdo->prepare("DELETE FROM password_resets WHERE email = ?")->execute([$row['email']]);
-        echo "Contraseña actualizada. <a href='auth.html'>Ingresar</a>";
+        echo "Contraseña actualizada. <a href='index.html'>Ingresar</a>";
     } else {
         echo "Token inválido o vencido";
     }

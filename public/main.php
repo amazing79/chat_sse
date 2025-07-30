@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header('Location: auth.html');
+    header('Location: index.html');
     exit;
 }
 
@@ -12,7 +12,7 @@ $user = $stmt->fetch();
 
 if (!$user) {
     session_destroy();
-    header('Location: auth.html');
+    header('Location: index.html');
     exit;
 }
 ?>

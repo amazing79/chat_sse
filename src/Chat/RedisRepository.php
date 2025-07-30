@@ -38,7 +38,7 @@ class RedisRepository implements ChatRepository
         return $this->client->llen(self::CHAT_KEY);
     }
 
-    public function saveMessage($message): void
+    public function saveMessage(Message $message): void
     {
         $msg[] = "{$message->getUser()} says: {$message->getMessage()}";
         $this->client->rpush(self::CHAT_KEY, $msg);

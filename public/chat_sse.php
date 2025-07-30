@@ -12,11 +12,11 @@ header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
 header('X-Accel-Buffering: no');
 
-// $db = new RedisRepository();
-$db = new MysqlRepository();
-$presenter = new MySqlMessagePresenter();
-$chat = new Chat($db, $presenter);
-
+$db = new RedisRepository();
+//$db = new MysqlRepository();
+//$presenter = new MySqlMessagePresenter();
+//$chat = new Chat($db, $presenter);
+$chat = new Chat($db);
 $lastCount = $chat->getTotalMessages();
 
 // Al conectar, mandar el historial inicial

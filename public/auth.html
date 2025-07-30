@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Login / Registro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <form id="loginForm" action="auth.php" method="POST">
+        <h2>Iniciar sesión</h2>
+        <input type="hidden" name="action" value="login">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <button type="submit">Ingresar</button>
+        <div class="toggle">
+            ¿No tenés cuenta? <button class="link-button" onclick="switchForm('register')">Registrate</button><br>
+            <button class="link-button" onclick="switchForm('reset')">¿Olvidaste tu contraseña?</button>
+        </div>
+    </form>
+
+    <form id="registerForm" class="hidden" action="auth.php" method="POST">
+        <h2>Registro</h2>
+        <input type="hidden" name="action" value="register">
+        <input type="text" name="nombre" placeholder="Nombre" required>
+        <input type="text" name="apellido" placeholder="Apellido" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <input type="password" name="password2" placeholder="Repetir contraseña" required>
+        <button type="submit">Registrarse</button>
+        <div class="toggle">
+            ¿Ya tenés cuenta? <button class="link-button" onclick="switchForm('login')">Ingresar</button>
+        </div>
+    </form>
+
+    <form id="resetForm" class="hidden" action="auth.php" method="POST">
+        <h2>Recuperar contraseña</h2>
+        <input type="hidden" name="action" value="reset_request">
+        <input type="email" name="email" placeholder="Email" required>
+        <button type="submit">Enviar enlace</button>
+        <div class="toggle">
+            <button class="link-button" onclick="switchForm('login')">Volver</button>
+        </div>
+    </form>
+</div>
+<script src="assets/js/login.js"></script>
+</body>
+</html>

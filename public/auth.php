@@ -59,12 +59,9 @@ if ($action === 'reset_request') {
 }
 
 if ($action === 'reset_confirm') {
-    $pass = $_POST['password'];
-    $pass2 = $_POST['password2'];
-
-    if ($pass !== $pass2) die("Las contraseñas no coinciden");
     $newCredentials['token'] = $_POST['token'];
-    $newCredentials['password'] = $pass;
+    $newCredentials['password'] = $_POST['password'];
+    $newCredentials['password_confirm'] = $_POST['password2'];
     $command = new ResetPasswordCommandHandler(new UserMysqlRepository(new DB()));
     $response = $command->handle($newCredentials);
     if ($response['code'] === 200) {

@@ -16,14 +16,22 @@ class ResetPasswordCommandHandler
         $response = [];
         $response['code'] = 200;
         $response['data'] = [];
-        $response['message'] = 'Passowrd reset successfully';
+        $response['message'] = 'Password reset successfully';
         try {
+            $this->assertValidPassword($credentials['password'], $credentials['password_confirm']);
             $this->userRepository->resetPassword($credentials);
             return $response;
         } catch (\Exception $e) {
             $response['code'] = 500;
             $response['message'] = $e->getMessage();
             return $response;
+        }
+    }
+
+    private function assertValidPassword($pass, $passConfirm): void
+    {
+        if ($pass !== $passConfirm) {
+            throw new \InvalidArgumentException("las contraseñas no coinciden");
         }
     }
 }

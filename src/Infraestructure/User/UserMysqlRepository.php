@@ -9,9 +9,10 @@ use Ignacio\ChatSsr\Infraestructure\Common\DB;
 class UserMysqlRepository implements UserRepository
 {
     public function __construct(
-        private DB $db
+        private ?DB $db = null
     )
     {
+        $this->db = $db ?? new DB();
     }
     public function findByEmail(string $email): ?User
     {

@@ -24,7 +24,7 @@ switch ($action) {
         $values['password'] = $_POST['password'];
         $values['password_confirm'] = $_POST['password2'];
 
-        $command = new RegisterUserCommandHandler(new UserMysqlRepository(new DB()));
+        $command = new RegisterUserCommandHandler(new UserMysqlRepository());
         $response = $command->handle($values);
         if ($response['code'] === 200) {
             echo "Registro exitoso. <a href='index.html'>Ingresar</a>";
@@ -34,7 +34,7 @@ switch ($action) {
         break;
     case UserActions::RESET_REQUEST:
         $email = $_POST['email'];
-        $command = new RegisterResetRequestCommandHandler(new UserMysqlRepository(new DB()));
+        $command = new RegisterResetRequestCommandHandler(new UserMysqlRepository());
         $response = $command->handle($email);
         if ($response['code'] === 200) {
             $link = "http://localhost/sistemas/chat/reset_password.php?token={$response['data']}";
@@ -48,7 +48,7 @@ switch ($action) {
         $newCredentials['token'] = $_POST['token'];
         $newCredentials['password'] = $_POST['password'];
         $newCredentials['password_confirm'] = $_POST['password2'];
-        $command = new ResetPasswordCommandHandler(new UserMysqlRepository(new DB()));
+        $command = new ResetPasswordCommandHandler(new UserMysqlRepository());
         $response = $command->handle($newCredentials);
         if ($response['code'] === 200) {
             echo "Contraseña actualizada. <a href='index.html'>Ingresar</a>";
@@ -60,7 +60,7 @@ switch ($action) {
     default:
     $credentials['email'] = $_POST['email'];
     $credentials['password'] = $_POST['password'];
-    $command  = new LoginUserCommandHandler(new UserMysqlRepository(new DB()));
+    $command  = new LoginUserCommandHandler(new UserMysqlRepository());
     $response = $command->handle($credentials);
 
     if ($response['code'] === 200) {

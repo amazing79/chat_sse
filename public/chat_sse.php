@@ -15,10 +15,11 @@ header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
 header('X-Accel-Buffering: no');
 
-$db = new RedisRepository();
+// Si trabajamos con mysql, descomentar las lineas de mysql y comentar la de Redis.
 //$db = new MysqlRepository();
 //$presenter = new MySqlMessagePresenter();
 //$chat = new Chat($db, $presenter);
+$db = new RedisRepository();
 $chat = new Chat($db);
 $lastCount = $chat->getTotalMessages();
 
@@ -43,5 +44,5 @@ while (true) {
 
     if (connection_aborted()) break;
     usleep(500000); // medio segundo para no sobrecargar CPU
-    // sleep(1);
+    // sleep(1); // En caso de usar msyql, usar un segundo para no sobrecargar CPU
 }

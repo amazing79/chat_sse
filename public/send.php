@@ -1,15 +1,15 @@
 <?php
-require_once('helpers.php');
-$user = getUserForActiveSession();
 
 use Ignacio\ChatSsr\Domain\Chat\Chat;
 use Ignacio\ChatSsr\Infraestructure\Chat\MysqlRepository;
 use Ignacio\ChatSsr\Infraestructure\Chat\RedisRepository;
 
 require __DIR__ . '/../vendor/autoload.php';
-
+require_once('helpers.php');
+$user = getUserForActiveSession();
 $db = new RedisRepository();
-//$db = new MysqlRepository();
+// En caso de trabajar con mysql para repositorio de mensajes, comentar el anterior y descomentar Mysql
+// $db = new MysqlRepository();
 $chat = new Chat($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

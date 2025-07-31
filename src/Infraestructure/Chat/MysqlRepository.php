@@ -57,11 +57,10 @@ class MysqlRepository implements ChatRepository
     public function getTotalMessages(): int
     {
         $pdo = $this->db->getConnexion();
-        $sql = 'SELECT MAX(id) FROM mensajes;';
+        $sql = 'SELECT id FROM mensajes ORDER BY id DESC LIMIT 1;';
         $stmt = $pdo->query($sql);
         $stmt->execute();
-        $total = $stmt->fetchColumn() ?? 0;
-        return $total;
+        return $stmt->fetchColumn() ?? 0;
     }
 
     public function saveMessage(Message $message): void

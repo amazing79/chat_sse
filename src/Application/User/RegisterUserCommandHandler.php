@@ -2,6 +2,7 @@
 
 namespace Ignacio\ChatSsr\Application\User;
 
+use Ignacio\ChatSsr\Domain\Common\Utils;
 use Ignacio\ChatSsr\Domain\User\User;
 use Ignacio\ChatSsr\Domain\User\UserRepository;
 
@@ -20,6 +21,8 @@ class RegisterUserCommandHandler
         $response['data'] = [];
         $response['message'] = '';
         try{
+            $this->assertValidEmailAddress($values['email']);
+            $this->assertValidPassword($values['password'], $values['password_confirm']);
             $user = User::createUserFromArray($values);
             $id = $this->userRepository->save($user);
             $response['data'] = $id;
@@ -29,6 +32,25 @@ class RegisterUserCommandHandler
             $response['code'] = 500;
             $response['message'] = "An error occurred: {$e->getMessage()}";
             return $response;
+        }
+    }
+
+    private function assertValidPassword($pass, $passConfirm): void
+    {
+        if ($pass !== $passConfirm) {
+            throw new \InvalidArgumentException("las contraseñas no coinciden");
+        }
+    }
+
+    public function assertValidEmailAddress(string $email): void
+    {
+        $tmp = Utils::cleanEmail($email);
+        if (!$tmp) {
+            throw new \InvalidArgumentException("El mail ingresado no es correcto!");
+        }
+        $user = $this->userRepository->findByEmail($tmp);
+        if ($user) {
+            throw new \InvalidArgumentException("El mail ingresado ya existe!");
         }
     }
 }

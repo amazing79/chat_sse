@@ -17,17 +17,11 @@ $action = $_POST['action'] ?? '';
 if ($action === 'register') {
     $values = [];
     $values['nombre'] = $_POST['nombre'];
-    $values['nombre']= $_POST['apellido'];
-    $values['email'] = Utils::cleanEmail($_POST['email']);
-    $pass = $_POST['password'];
-    $pass2 = $_POST['password2'];
+    $values['apellido']= $_POST['apellido'];
+    $values['email'] = $_POST['email'];
+    $values['password'] = $_POST['password'];
+    $values['password_confirm'] = $_POST['password2'];
 
-    if (!$values['email'] || $pass !== $pass2) {
-        die("Error: Email inválido o contraseñas no coinciden");
-    }
-
-    $hash = password_hash($pass, PASSWORD_DEFAULT);
-    $values['password'] = $hash;
     $command = new RegisterUserCommandHandler(new UserMysqlRepository(new DB()));
     $result = $command->handle($values);
     if ($result['code'] === 200) {
@@ -35,7 +29,6 @@ if ($action === 'register') {
     } else {
         echo "Error: " . $result['message'];
     }
-
     exit;
 }
 

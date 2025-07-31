@@ -40,11 +40,11 @@ class User
 
     public static function createUserFromArray(array $data): User
     {
-        $id = $data['id'] ?? null;
-        $name = $data['nombre'] ?? null;
-        $lastName = $data['apellido'] ?? null;
+        $id = $data['id'] ?? 0;
+        $name = $data['nombre'] ?? '';
+        $lastName = $data['apellido'] ?? '';
         $email = $data['email'] ?? '';
         $password = $data['password'] ?? '';
-        return new User($id, $name, $lastName, $email, $password);
+        return new User($id, $name, $lastName, $password, $email);
     }
 }

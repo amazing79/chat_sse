@@ -35,5 +35,9 @@ class RegisterResetRequestCommandHandler
         if (!$tmp) {
             throw new \InvalidArgumentException("El mail ingresado no es correcto!");
         }
+        $user = $this->userRepository->findByEmail($tmp);
+        if (!$user) {
+            throw new \InvalidArgumentException("El mail no pertenece a ningun usuario activo!");
+        }
     }
 }

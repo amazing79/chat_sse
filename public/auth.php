@@ -10,7 +10,7 @@ use Ignacio\ChatSsr\Infraestructure\User\UserMysqlRepository;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ .'/../');
 $dotenv->safeLoad();
 
 $action = $_POST['action'] ?? '';
@@ -40,6 +40,8 @@ switch ($action) {
             $link = "http://localhost/sistemas/chat/reset_password.php?token={$response['data']}";
             // Enviar por correo en producción, aquí se muestra directamente
             echo "Enlace para restablecer: <a href='$link'>$link</a>";
+        } else {
+            echo $response['message'];
         }
         break;
     case UserActions::RESET_CONFIRM:
@@ -51,7 +53,7 @@ switch ($action) {
         if ($response['code'] === 200) {
             echo "Contraseña actualizada. <a href='index.html'>Ingresar</a>";
         } else {
-            echo $response['message'];
+            echo "Error: " . $response['message'];
         }
         break;
     case UserActions::LOGIN:

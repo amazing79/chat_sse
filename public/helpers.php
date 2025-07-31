@@ -6,7 +6,7 @@ use Ignacio\ChatSsr\Infraestructure\Common\DB;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ .'/../');
 $dotenv->safeLoad();
 function getUserForActiveSession(): mixed
 {

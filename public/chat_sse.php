@@ -8,7 +8,7 @@ use Ignacio\ChatSsr\Infraestructure\Chat\RedisRepository;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ .'/../');
 $dotenv->safeLoad();
 
 header('Content-Type: text/event-stream');

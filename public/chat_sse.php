@@ -8,6 +8,9 @@ use Ignacio\ChatSsr\Infraestructure\Chat\RedisRepository;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
+
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
 header('X-Accel-Buffering: no');
@@ -39,6 +42,6 @@ while (true) {
     }
 
     if (connection_aborted()) break;
-    // usleep(500000); // medio segundo para no sobrecargar CPU
-    sleep(1);
+    usleep(500000); // medio segundo para no sobrecargar CPU
+    // sleep(1);
 }

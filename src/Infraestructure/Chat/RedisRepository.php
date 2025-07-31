@@ -8,26 +8,27 @@ use Predis\Client;
 class RedisRepository implements ChatRepository
 {
     private Client $client;
-    const CHAT_KEY  = 'chat_key';
+    private mixed $chat_key;
 
     public function __construct(Client $client = null)
     {
         $this->client = $client ?? new Client([
-            'scheme' => 'tcp',
-            'host' => '127.0.0.1',
-            'port' => 6379,
-            'database' => 0,
+            'scheme' => $_ENV['REDIS_CHAT_SCHEME'] ?? 'tcp',
+            'host' => $_ENV['REDIS_CHAT_HOST'] ?? '127.0.0.1',
+            'port' => $_ENV['REDIS_CHAT_PORT'] ?? 6379,
+            'database' => $_ENV['REDIS_CHAT_SCHEME'] ?? 0,
         ]);
+        $this->chat_key = $_ENV['REDIS_CHAT_KEY'] ?? 'chat_token';
     }
 
     public function getAllMessages(): array
     {
-        return $this->client->lrange(self::CHAT_KEY, 0, -1);
+        return $this->client->lrange($this->chat_key, 0, -1);
     }
 
     public function getNewMessages($lastCount): array
     {
-        return $this->client->lRange(self::CHAT_KEY, $lastCount, $this->getTotalMessages());
+        return $this->client->lRange($this->chat_key, $lastCount, $this->getTotalMessages());
     }
 
     public function getUserMessages($user)
@@ -38,12 +39,12 @@ class RedisRepository implements ChatRepository
 
     public function getTotalMessages(): int
     {
-        return $this->client->llen(self::CHAT_KEY);
+        return $this->client->llen($this->chat_key);
     }
 
     public function saveMessage(Message $message): void
     {
         $msg[] = "{$message->getUser()} says: {$message->getMessage()}";
-        $this->client->rpush(self::CHAT_KEY, $msg);
+        $this->client->rpush($this->chat_key, $msg);
     }
 }

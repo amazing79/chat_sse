@@ -10,6 +10,9 @@ use Ignacio\ChatSsr\Infraestructure\User\UserMysqlRepository;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
+
 $action = $_POST['action'] ?? '';
 
 switch ($action) {

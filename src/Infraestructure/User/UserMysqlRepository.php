@@ -88,27 +88,33 @@ class UserMysqlRepository implements UserRepository
             $stmt->bindValue(':email', $row['email']);
             $stmt->execute();
             //2do limpio el registro de la solicitud de passwords
-            $sql = "DELETE FROM password_resets WHERE email = :email";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindValue(':email', $row['email']);
-            $stmt->execute();
+            $this->deleteRequestResetPassword($row['email']);
         }
     }
 
-    public function changePasswordRequest(array $values): void
+    public function requestChangePassword(string $email): string
     {
-        $pdo = $this->db->getConnexion();
         //1ro Borro cualquier solicitud anterior
-        $sql = "DELETE FROM password_resets WHERE email = :email";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':email', $values['email']);
-        $stmt->execute();
+        $this->deleteRequestResetPassword($email);
         //2do Registro la solicitud
+        $pdo = $this->db->getConnexion();
         $sql = "INSERT INTO password_resets (email, token, expires_at) VALUES (:email, :token, :expires_at)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':email', $values['email']);
-        $stmt->bindValue(':token', $values['token']);
-        $stmt->bindValue(':expires_at', $values['expires_at']);
+        $token = bin2hex(random_bytes(32));
+        $expiresAt = date("Y-m-d H:i:s", time() + 3600);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':token', $token);
+        $stmt->bindValue(':expires_at',$expiresAt);
+        $stmt->execute();
+        return $token;
+    }
+
+    private function deleteRequestResetPassword(string $email): void
+    {
+        $pdo = $this->db->getConnexion();
+        $sql = "DELETE FROM password_resets WHERE email = :email";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':email', $email);
         $stmt->execute();
     }
 }

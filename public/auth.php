@@ -6,7 +6,6 @@ use Ignacio\ChatSsr\Application\User\RegisterUserCommandHandler;
 use Ignacio\ChatSsr\Application\User\ResetPasswordCommandHandler;
 use Ignacio\ChatSsr\Infraestructure\Common\DB;
 use Ignacio\ChatSsr\Infraestructure\User\UserMysqlRepository;
-use Ignacio\ChatSsr\Domain\Common\Utils;
 
 session_start();
 
@@ -48,17 +47,11 @@ if ($action === 'login') {
 }
 
 if ($action === 'reset_request') {
-    $email = Utils::cleanEmail($_POST['email']);
-    if (!$email) die("Email inválido");
-    $values['email'] = $email;
-    $values['token'] = bin2hex(random_bytes(32));
-    $values['expires_at'] = date("Y-m-d H:i:s", time() + 3600);
-
+    $email = $_POST['email'];
     $command = new RegisterResetRequestCommandHandler(new UserMysqlRepository(new DB()));
-    $response = $command->handle($values);
-
+    $response = $command->handle($email);
     if ($response['code'] === 200) {
-        $link = "http://localhost/sistemas/chat/reset_password.php?token=$values[token]";
+        $link = "http://localhost/sistemas/chat/reset_password.php?token={$response['data']}";
         // Enviar por correo en producción, aquí se muestra directamente
         echo "Enlace para restablecer: <a href='$link'>$link</a>";
         exit;

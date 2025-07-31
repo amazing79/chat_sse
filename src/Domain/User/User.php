@@ -47,4 +47,15 @@ class User
         $password = $data['password'] ?? '';
         return new User($id, $name, $lastName, $password, $email);
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->userId,
+            'nombre' => $this->name,
+            'apellido' => $this->lastName,
+            'email' => $this->email,
+            'password' => $this->password,
+        ];
+    }
 }

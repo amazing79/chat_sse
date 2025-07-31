@@ -1,20 +1,10 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('Location: index.html');
-    exit;
-}
+/**
+ * @return mixed|void
+ */
+require_once('helpers.php');
 
-$pdo = new PDO("mysql:host=localhost;dbname=chatdb;charset=utf8mb4", "root", "gueraike");
-$stmt = $pdo->prepare("SELECT nombre, apellido FROM usuarios WHERE id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$user = $stmt->fetch();
-
-if (!$user) {
-    session_destroy();
-    header('Location: index.html');
-    exit;
-}
+$user = getUserForActiveSession();
 ?>
 
 <!DOCTYPE html>

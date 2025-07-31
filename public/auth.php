@@ -8,8 +8,6 @@ use Ignacio\ChatSsr\Domain\User\Consts\UserActions;
 use Ignacio\ChatSsr\Infraestructure\Common\DB;
 use Ignacio\ChatSsr\Infraestructure\User\UserMysqlRepository;
 
-session_start();
-
 require __DIR__ . '/../vendor/autoload.php';
 
 $action = $_POST['action'] ?? '';
@@ -61,6 +59,7 @@ switch ($action) {
     $response = $command->handle($credentials);
 
     if ($response['code'] === 200) {
+        session_start();
         $_SESSION['user_id'] = $response['data'];
         header("Location: main.php");
     } else {

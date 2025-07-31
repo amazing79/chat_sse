@@ -42,7 +42,7 @@ class RegisterUserCommandHandler
         }
     }
 
-    public function assertValidEmailAddress(string $email): void
+    private function assertValidEmailAddress(string $email): void
     {
         $tmp = Utils::cleanEmail($email);
         if (!$tmp) {

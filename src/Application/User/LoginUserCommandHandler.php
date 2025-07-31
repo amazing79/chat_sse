@@ -2,6 +2,7 @@
 
 namespace Ignacio\ChatSsr\Application\User;
 
+use Ignacio\ChatSsr\Domain\Common\Utils;
 use Ignacio\ChatSsr\Domain\User\UserRepository;
 
 class LoginUserCommandHandler
@@ -19,6 +20,7 @@ class LoginUserCommandHandler
         $response['data'] = [];
         $response['message'] = 'User was successfully logged in';
         try {
+            $this->assertValidEmail($credentials['email']);
             $user = $this->userRepository->findUserByCredentials($credentials);
             if (!$user) {
                 throw new \Exception('User not found');
@@ -29,6 +31,14 @@ class LoginUserCommandHandler
             $response['code'] = 500;
             $response['message'] = $e->getMessage();
             return $response;
+        }
+    }
+
+    private function assertValidEmail(string $email): void
+    {
+        $tmp = Utils::cleanEmail($email);
+        if (!$tmp) {
+            throw new \InvalidArgumentException("El mail ingresado no es correcto!");
         }
     }
 }

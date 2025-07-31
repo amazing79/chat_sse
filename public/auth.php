@@ -23,17 +23,17 @@ if ($action === 'register') {
     $values['password_confirm'] = $_POST['password2'];
 
     $command = new RegisterUserCommandHandler(new UserMysqlRepository(new DB()));
-    $result = $command->handle($values);
-    if ($result['code'] === 200) {
+    $response = $command->handle($values);
+    if ($response['code'] === 200) {
         echo "Registro exitoso. <a href='index.html'>Ingresar</a>";
     } else {
-        echo "Error: " . $result['message'];
+        echo "Error: " . $response['message'];
     }
     exit;
 }
 
 if ($action === 'login') {
-    $credentials['email'] = Utils::cleanEmail($_POST['email']);
+    $credentials['email'] = $_POST['email'];
     $credentials['password'] = $_POST['password'];
     $command  = new LoginUserCommandHandler(new UserMysqlRepository(new DB()));
     $response = $command->handle($credentials);
@@ -41,11 +41,10 @@ if ($action === 'login') {
     if ($response['code'] === 200) {
         $_SESSION['user_id'] = $response['data'];
         header("Location: main.php");
-        exit;
     } else {
         header("Location: index.html");
-        exit;
     }
+    exit;
 }
 
 if ($action === 'reset_request') {

@@ -16,7 +16,7 @@ class RedisRepository implements ChatRepository
             'scheme' => $_ENV['REDIS_CHAT_SCHEME'] ?? 'tcp',
             'host' => $_ENV['REDIS_CHAT_HOST'] ?? '127.0.0.1',
             'port' => $_ENV['REDIS_CHAT_PORT'] ?? 6379,
-            'database' => $_ENV['REDIS_CHAT_SCHEME'] ?? 0,
+            'database' => $_ENV['REDIS_CHAT_DB'] ?? 0,
         ]);
         $this->chat_key = $_ENV['REDIS_CHAT_KEY'] ?? 'chat_token';
     }

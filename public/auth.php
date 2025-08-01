@@ -26,22 +26,44 @@ switch ($action) {
 
         $command = new RegisterUserCommandHandler(new UserMysqlRepository());
         $response = $command->handle($values);
+        $result = [];
         if ($response['code'] === 200) {
-            echo "Registro exitoso. <a href='index.html'>Ingresar</a>";
+            $result['url'] = "url=index.html";
+            $result['type'] = 'type=success';
+            $msg = urlencode('Usuario registrado exitosamente');
+            $result['text'] = "msg={$msg}";
+            $params = implode('&', $result);
+            $targetUrl = "operation_info.php?{$params}";
+            header('Location: ' . $targetUrl);
         } else {
-            echo "Error: " . $response['message'];
+            $result['url'] = "url=index.html";
+            $result['type'] = 'type=error';
+            $result['text'] = "msg={$response['message']}";
+            $params = implode('&', $result);
+            $targetUrl = "operation_info.php?{$params}";
+            header('Location: ' . $targetUrl);
         }
         break;
     case UserActions::RESET_REQUEST:
         $email = $_POST['email'];
         $command = new RegisterResetRequestCommandHandler(new UserMysqlRepository());
         $response = $command->handle($email);
+        $result = [];
         if ($response['code'] === 200) {
             $link = "http://localhost/sistemas/chat/reset_password.php?token={$response['data']}";
-            // Enviar por correo en producción, aquí se muestra directamente
-            echo "Enlace para restablecer: <a href='$link'>$link</a>";
+            $result['url'] = "url={$link}";
+            $result['type'] = 'type=success';
+            $result['text'] = "msg={$response['message']}";
+            $params = implode('&', $result);
+            $targetUrl = "operation_info.php?{$params}";
+            header('Location: ' . $targetUrl);
         } else {
-            echo $response['message'];
+            $result['url'] = "url=index.html";
+            $result['type'] = 'type=error';
+            $result['text'] = "msg={$response['message']}";
+            $params = implode('&', $result);
+            $targetUrl = "operation_info.php?{$params}";
+            header('Location: ' . $targetUrl);
         }
         break;
     case UserActions::RESET_CONFIRM:
@@ -50,10 +72,22 @@ switch ($action) {
         $newCredentials['password_confirm'] = $_POST['password2'];
         $command = new ResetPasswordCommandHandler(new UserMysqlRepository());
         $response = $command->handle($newCredentials);
+        $result = [];
         if ($response['code'] === 200) {
+            $result['url'] = "url=index.html";
+            $result['type'] = 'type=success';
+            $result['text'] = "msg={$response['message']}";
+            $params = implode('&', $result);
+            $targetUrl = "operation_info.php?{$params}";
+            header('Location: ' . $targetUrl);
             echo "Contraseña actualizada. <a href='index.html'>Ingresar</a>";
         } else {
-            echo "Error: " . $response['message'];
+            $result['url'] = "url=index.html";
+            $result['type'] = 'type=error';
+            $result['text'] = "msg={$response['message']}";
+            $params = implode('&', $result);
+            $targetUrl = "operation_info.php?{$params}";
+            header('Location: ' . $targetUrl);
         }
         break;
     case UserActions::LOGIN:
@@ -62,13 +96,18 @@ switch ($action) {
     $credentials['password'] = $_POST['password'];
     $command  = new LoginUserCommandHandler(new UserMysqlRepository());
     $response = $command->handle($credentials);
-
+    $result = [];
     if ($response['code'] === 200) {
         session_start();
         $_SESSION['user_id'] = $response['data'];
         header("Location: main.php");
     } else {
-        header("Location: index.html");
+        $result['url'] = "url=index.html";
+        $result['type'] = 'type=error';
+        $result['text'] = "msg={$response['message']}";
+        $params = implode('&', $result);
+        $targetUrl = "operation_info.php?{$params}";
+        header('Location: ' . $targetUrl);
     }
 }
 exit;

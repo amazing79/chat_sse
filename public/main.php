@@ -2,9 +2,14 @@
 /**
  * @return mixed|void
  */
-require_once('helpers.php');
+use Ignacio\ChatSsr\Application\Common\LoginHelper;
 
-$user = getUserForActiveSession();
+require __DIR__ . '/../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ .'/../');
+$dotenv->safeLoad();
+
+$user = LoginHelper::getUserForActiveSession();
 ?>
 
 <!DOCTYPE html>

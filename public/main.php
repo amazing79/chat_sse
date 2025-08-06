@@ -23,7 +23,7 @@ $users = LoginHelper::getChatUsers();
 </head>
 <body>
 <div id="chat-container" class="container">
-    <h2>Bienvenido <?= htmlspecialchars($user['nombre']) ?> <?= htmlspecialchars($user['apellido']) ?>
+    <h2>Bienvenido <?= htmlspecialchars($user['nombreApellido']) ?>
         <a id="logout" class="logout" href="logout.php">Salir</a>
     </h2>
     <div class="message_container">
@@ -32,7 +32,7 @@ $users = LoginHelper::getChatUsers();
                 <?php
                 foreach ($users as $userChat) {
                     $state = $userChat['email'] === $user['email'] ? 'user_list_active' : '';
-                    $item = '<li class="user_list__item ' . $state . '" data-user="'. $userChat['email'] .'"> ' . $userChat['nombre'] . '</li>';
+                    $item = '<li class="user_list__item ' . $state . '" data-user="'. $userChat['email'] .'"> ' . $userChat['nombreApellido'] . '</li>';
                     echo $item;
                 }
                 ?>

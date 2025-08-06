@@ -124,7 +124,7 @@ class UserMysqlRepository implements UserRepository
     {
         $result = [];
         $pdo = $this->db->getConnexion();
-        $sql = "SELECT id, nombre, apellido, email FROM usuarios";
+        $sql = "SELECT id, nombre, apellido, email FROM usuarios order by nombre, apellido";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $data =  $stmt->fetchAll(PDO::FETCH_ASSOC);

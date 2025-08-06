@@ -56,6 +56,7 @@ class User
             'apellido' => $this->lastName,
             'email' => $this->email,
             'password' => $this->password,
+            'nombreApellido' => $this->name . ' ' . $this->lastName,
         ];
     }
 }

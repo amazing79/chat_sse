@@ -5,6 +5,7 @@ namespace Ignacio\ChatSsr\Infraestructure\User;
 use Ignacio\ChatSsr\Domain\User\User;
 use Ignacio\ChatSsr\Domain\User\UserRepository;
 use Ignacio\ChatSsr\Infraestructure\Common\DB;
+use PDO;
 
 class UserMysqlRepository implements UserRepository
 {
@@ -117,5 +118,19 @@ class UserMysqlRepository implements UserRepository
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
+    }
+
+    public function getAll(): array
+    {
+        $result = [];
+        $pdo = $this->db->getConnexion();
+        $sql = "SELECT id, nombre, apellido, email FROM usuarios";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        $data =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($data as $user) {
+            $result[] =  User::createUserFromArray($user);
+        };
+        return $result;
     }
 }

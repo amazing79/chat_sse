@@ -10,5 +10,6 @@ interface UserRepository
     public function findUserByCredentials(array $credentials): ?User;
     public function resetPassword(array $newCredentials): void;
     public function requestChangePassword(string $email): string;
+    public function getAll(): array;
 
 }

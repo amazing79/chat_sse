@@ -2,6 +2,8 @@
 
 namespace Ignacio\ChatSsr\Domain\Chat;
 
+use Ignacio\ChatSsr\Domain\User\User;
+
 class Chat
 {
     public function __construct(
@@ -9,8 +11,6 @@ class Chat
         private ?Presenter $presenter = null
     )
     {
-        $this->repository = $repository;
-        $this->presenter = $presenter;
     }
 
     private function hasPresenter(): bool
@@ -55,5 +55,14 @@ class Chat
     public function getTotalMessages(): int
     {
         return $this->repository->getTotalMessages();
+    }
+
+    public function notifyActiveUsers(): string
+    {
+        $activeUsers = $this->repository->getActiveUsers();
+        $ouput = "\n";
+        $ouput .= "event: users\n";
+        $ouput .= "data: " . json_encode(['users' => $activeUsers]) . "\n\n";
+        return $ouput;
     }
 }

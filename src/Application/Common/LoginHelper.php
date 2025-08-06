@@ -2,11 +2,13 @@
 
 namespace Ignacio\ChatSsr\Application\Common;
 
+use Ignacio\ChatSsr\Application\User\GetChatUsersQueryHandler;
 use Ignacio\ChatSsr\Application\User\GetUserByIdQueryHandler;
 use Ignacio\ChatSsr\Application\User\LoginUserCommandHandler;
 use Ignacio\ChatSsr\Application\User\RegisterResetRequestCommandHandler;
 use Ignacio\ChatSsr\Application\User\RegisterUserCommandHandler;
 use Ignacio\ChatSsr\Application\User\ResetPasswordCommandHandler;
+use Ignacio\ChatSsr\Infraestructure\Chat\RedisRepository;
 use Ignacio\ChatSsr\Infraestructure\User\UserMysqlRepository;
 
 class LoginHelper
@@ -130,7 +132,7 @@ class LoginHelper
     {
         $credentials['email'] = $request['email'];
         $credentials['password'] = $request['password'];
-        $command = new LoginUserCommandHandler(new UserMysqlRepository());
+        $command = new LoginUserCommandHandler(new UserMysqlRepository(),new RedisRepository());
         $response = $command->handle($credentials);
         $result = [];
         if ($response['code'] === 200) {
@@ -145,5 +147,12 @@ class LoginHelper
             $targetUrl = "operation_info.php?{$params}";
             header('Location: ' . $targetUrl);
         }
+    }
+
+    public static function getChatUsers(): array
+    {
+        $query = new GetChatUsersQueryHandler(new UserMysqlRepository());
+        $response = $query->handle();
+        return $response['data'];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Ignacio\ChatSsr\Application\User;
 
+use Ignacio\ChatSsr\Application\Services\AddActiveUserService;
+use Ignacio\ChatSsr\Domain\Chat\ChatRepository;
 use Ignacio\ChatSsr\Domain\Common\Utils;
 use Ignacio\ChatSsr\Domain\User\UserRepository;
 
@@ -9,6 +11,7 @@ class LoginUserCommandHandler
 {
     public function __construct(
         private UserRepository $userRepository,
+        private ChatRepository $chatRepository,
     )
     {
     }
@@ -25,6 +28,8 @@ class LoginUserCommandHandler
             if (!$user) {
                 throw new \Exception('User not found');
             }
+            $service = new AddActiveUserService($this->chatRepository);
+            $service->handle($user);
             $response['data'] = $user->getUserId();
             return $response;
         } catch (\Exception $e) {

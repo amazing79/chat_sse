@@ -32,6 +32,55 @@ h2{
     flex-direction: column;
 }
 
+.message_container{
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.user_container{
+    overflow-y: auto;
+    background-color:#DFF2FE;
+    border: solid 1px #ccc;
+    height: 300px;
+    max-height: 300px;
+    min-width: 100px;
+}
+
+.user_list{
+    list-style: none;
+    padding: 5px;
+}
+
+.user_list__item{
+    margin-bottom: 5px;
+    color: #cccccc;
+}
+
+.user_list__item::before{
+    content: "";
+    display: inline-block; /* Hace que el círculo se comporte como un elemento en línea */
+    width: 8px; /* Ancho del círculo */
+    height: 8px; /* Alto del círculo */
+    border-radius: 50%; /* Hace que el elemento sea un círculo */
+    background-color: lightgray; /* Color de fondo del círculo */
+    margin-right: 8px; /* Espacio entre el círculo y el texto */
+    vertical-align: middle; /* Alinea verticalmente el círculo con el texto */
+}
+
+.user_list__item:hover{
+    cursor: pointer;
+}
+
+.user_list_active{
+    font-weight: bold;
+    color:#1C69A8;
+}
+
+.user_list_active::before{
+  background-color: lawngreen;
+}
+
 #messages {
     border: 1px solid #ccc;
     padding: 10px;

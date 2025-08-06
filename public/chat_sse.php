@@ -30,6 +30,8 @@ if ($lastCount > 0) {
     flush();
 }
 echo $chat->notifyActiveUsers();
+ob_flush();
+flush();
 $activeUsers = $db->getTotalActiveUsers();
 while (true) {
     // Ver cuántos mensajes hay ahora

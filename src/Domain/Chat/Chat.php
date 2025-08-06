@@ -2,8 +2,6 @@
 
 namespace Ignacio\ChatSsr\Domain\Chat;
 
-use Ignacio\ChatSsr\Domain\User\User;
-
 class Chat
 {
     public function __construct(

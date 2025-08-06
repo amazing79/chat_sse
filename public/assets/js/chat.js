@@ -3,6 +3,9 @@ const inputMsg = document.getElementById("msgInput");
 const sendBtn = document.getElementById("sendBtn");
 const logoutBtn = document.getElementById('logout');
 
+const logOut = new Audio("assets/sounds/traitor-101soundboards.mp3");
+const logIn = new Audio("assets/sounds/hello-101soundboards.mp3");
+
 const evtSource = new EventSource("chat_sse.php");
 
 evtSource.addEventListener("message", (e) => {
@@ -20,11 +23,18 @@ evtSource.addEventListener("users", (e) => {
     for(let i = 0; i< usersList.children.length; i++ ){
         let style = 'user_list_active';
         let item = usersList.children[i]
+        let estaActivo = item.classList.contains('user_list_active');
         item.classList.remove(style);
+
         for (let mail in users) {
             if(item.dataset.user === mail) {
                 item.classList.add(style);
             }
+        }
+        if(estaActivo && !item.classList.contains('user_list_active')) {
+            logOut.play().then(r => { console.log('user desconectado')});
+        } else if(!estaActivo && item.classList.contains('user_list_active')) {
+            logIn.play().then(r => { console.log('user desconectado')});
         }
     }
 });

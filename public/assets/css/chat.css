@@ -87,6 +87,7 @@ h2{
     height: 300px;
     overflow-y: auto;
     background: white;
+    width: 100%;
 }
 
 #input-area {

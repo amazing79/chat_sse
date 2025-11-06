@@ -6,7 +6,7 @@
 
 body {
     font-family: sans-serif;
-    background: #DFF2FE;
+    background: #2984d1;
     padding: 4rem 1rem;
     display: flex;
 }
@@ -40,7 +40,7 @@ h2{
 
 .user_container{
     overflow-y: auto;
-    background-color:#DFF2FE;
+    background-color:#1c191e;
     border: solid 1px #ccc;
     height: 300px;
     max-height: 300px;
@@ -89,8 +89,9 @@ h2{
     padding: 10px;
     height: 300px;
     overflow-y: auto;
-    background: white;
+    background: #1c191e;
     width: 70%;
+    color: whitesmoke;
 }
 
 #input-area {
@@ -117,4 +118,8 @@ button {
 .logout:hover {
     cursor: pointer;
     color: #2984D1;
+}
+
+#messages div {
+    margin-bottom: 5px;
 }

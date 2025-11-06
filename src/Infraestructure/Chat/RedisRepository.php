@@ -32,7 +32,7 @@ class RedisRepository implements ChatRepository
 
     public function getNewMessages($lastCount): array
     {
-        return $this->client->lRange($this->chat_key, $lastCount, $this->getTotalMessages());
+        return $this->client->lrange($this->chat_key, $lastCount, $this->getTotalMessages());
     }
 
     public function getUserMessages($user)
@@ -48,7 +48,7 @@ class RedisRepository implements ChatRepository
 
     public function saveMessage(Message $message): void
     {
-        $msg[] = "{$message->getUser()} says: {$message->getMessage()}";
+        $msg[] = "{$message->getUser()} dice: {$message->getMessage()}";
         $this->client->rpush($this->chat_key, $msg);
     }
 

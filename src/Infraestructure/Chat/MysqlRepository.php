@@ -4,6 +4,7 @@ namespace Ignacio\ChatSsr\Infraestructure\Chat;
 
 use Ignacio\ChatSsr\Domain\Chat\ChatRepository;
 use Ignacio\ChatSsr\Domain\Chat\Message;
+use Ignacio\ChatSsr\Domain\User\User;
 use Ignacio\ChatSsr\Infraestructure\Common\DB;
 
 class MysqlRepository implements ChatRepository
@@ -75,5 +76,25 @@ class MysqlRepository implements ChatRepository
         $stmt->bindValue(':usuario', $user);
         $stmt->bindValue(':texto',$messsage);
         $stmt->execute();
+    }
+
+    public function getActiveUsers(): array
+    {
+        // TODO: Implement getActiveUsers() method.
+    }
+
+    public function addActiveUser(User $user)
+    {
+        // TODO: Implement addActiveUser() method.
+    }
+
+    public function removeActiveUser(User $user)
+    {
+        // TODO: Implement removeActiveUser() method.
+    }
+
+    public function getTotalActiveUsers(): mixed
+    {
+        // TODO: Implement getTotalActiveUsers() method.
     }
 }

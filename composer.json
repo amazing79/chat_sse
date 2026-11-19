@@ -2,6 +2,7 @@
     "name": "ignacio/chat-ssr",
     "description": "Sistema de chat utilizando Server Sent events",
     "type": "project",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Ignacio\\ChatSsr\\": "src/"
